@@ -42,9 +42,10 @@ def read_users(limit: int = 10, offset: int = 0, session: Session = Depends(get_
     return {'users': user}
 
 
-# @app.get('/users/{user_id}', response_model=UserList)
-# def read_user(user_id: int):
-#     return {'users': [Settings[user_id - 1]]}
+@app.get('/users/{user_id}', response_model=UserList)
+def read_user(user_id: int, session: Session = Depends(get_session)):
+    db_user = session.scalar(select(User).where(User.id == user_id))
+    return {'users': [db_user]}
 
 
 @app.put('/users/{user_id}', response_model=UserPublic,)

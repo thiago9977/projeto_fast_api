@@ -43,10 +43,11 @@ def test_read_usersf_with_user(client, user):
     assert response.json() == {'users': [user_schema]}
 
 
-# def test_read_user(client):
-#     response = client.get('/users/1')
-#     assert response.status_code == HTTPStatus.OK
-#     assert response.json() == {'users': []}
+def test_read_user(client, user):
+    user_schema = UserPublic.model_validate(user).model_dump()
+    response = client.get('/users/1')
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {'users': [user_schema]}
 
 
 def test_update_user_error(client):
