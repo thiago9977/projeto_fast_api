@@ -50,9 +50,10 @@ def test_read_user(client, user):
     assert response.json() == {'users': [user_schema]}
 
 
-# def test_update_user_error(client):
-#     response = client.put('/users/2', json={'username': 'thiago', 'email': 'thiafo@rmai.com', 'password': 'awer', 'id': 2})
-#     assert response.status_code == HTTPStatus.NOT_FOUND
+def test_update_user_error(client, user, token):
+    response = client.put(f'/users/{user.id + 1}', headers={'Authorization': f'Bearer {token}'},
+                json={'username': 'thiago', 'email': 'thiafo@rmai.com', 'password': 'awer', 'id': 2})
+    assert response.status_code == HTTPStatus.FORBIDDEN
 
 
 def test_update_user(client, user, token):
@@ -62,9 +63,9 @@ def test_update_user(client, user, token):
     assert response.json() == {'username': 'bob', 'email': 'bob@example.com', 'id': 1, }
 
 
-# def test_delete_user_error(client):
-#     response = client.delete('/users/2')
-#     assert response.status_code == HTTPStatus.NOT_FOUND
+def test_delete_user_error(client, user, token):
+    response = client.delete(f'/users/{user.id + 2}', headers={'Authorization': f'Bearer {token}'})
+    assert response.status_code == HTTPStatus.FORBIDDEN
 
 
 def test_delete_user(client, user, token):
